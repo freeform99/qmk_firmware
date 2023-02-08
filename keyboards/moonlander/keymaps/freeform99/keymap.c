@@ -18,6 +18,7 @@
 
 #include QMK_KEYBOARD_H
 #include "features/select_word.h"
+#include "features/sentence_case.h"
 
 #include "version.h"
 
@@ -95,6 +96,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
 //  https://getreuer.info/posts/keyboards/select-word/index.html
   if (!process_select_word(keycode, record, SELWORD)) { return false; }
+// https://getreuer.info/posts/keyboards/sentence-case/index.html#add-it-to-your-keymap
+  if (!process_sentence_case(keycode, record)) { return false; }
 
 // original content of this function
   if (record -> event.pressed) {
@@ -119,3 +122,36 @@ const key_override_t** key_overrides = (const key_override_t*[]){
     &comm_key_override,
     NULL
 };
+
+enum combo_events {
+  EM_EMAIL,
+  BSPC_LSFT_CLEAR,
+  COMBO_LENGTH
+};
+uint16_t COMBO_LEN = COMBO_LENGTH; // remove the COMBO_COUNT define and use this instead!
+
+const uint16_t PROGMEM email_combo[] = {KC_E, KC_M, COMBO_END};
+const uint16_t PROGMEM clear_line_combo[] = {KC_BSPC, KC_LSFT, COMBO_END};
+
+combo_t key_combos[] = {
+  [EM_EMAIL] = COMBO_ACTION(email_combo),
+  [BSPC_LSFT_CLEAR] = COMBO_ACTION(clear_line_combo),
+};
+/* COMBO_ACTION(x) is same as COMBO(x, KC_NO) */
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  switch(combo_index) {
+    case EM_EMAIL:
+      if (pressed) {
+        SEND_STRING("john.doe@example.com");
+      }
+      break;
+    case BSPC_LSFT_CLEAR:
+      if (pressed) {
+        tap_code16(KC_END);
+        tap_code16(S(KC_HOME));
+        tap_code16(KC_BSPC);
+      }
+      break;
+  }
+}
