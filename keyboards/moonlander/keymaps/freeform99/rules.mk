@@ -5,6 +5,7 @@ CAPS_WORD_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes
 COMBO_ENABLE = yes
 
+
 #https://getreuer.info/posts/keyboards/select-word/index.html
 SRC += features/select_word.c
 
