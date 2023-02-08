@@ -17,17 +17,19 @@
  */
 
 #include QMK_KEYBOARD_H
+#include "features/select_word.h"
 
 #include "version.h"
 
-enum layers {
-    BASE, // default layer
-    SYMB, // symbols
-    MDIA, // media keys
-};
-
+// enum layers {
+//     BASE, // default layer
+//     SYMB, // symbols
+//     MDIA, // media keys
+// };
+//
 enum custom_keycodes {
     VRSN = ML_SAFE_RANGE,
+    SELWORD,
 };
 
 // clang-format off
@@ -37,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     RALT(KC_S)      , KC_B                      , KC_U                  , KC_DOT, KC_COMMA, RALT(KC_Y), LSFT(KC_6), KC_TRANSPARENT, KC_P, KC_C, KC_L, KC_M, KC_F, KC_X,
     KC_TRANSPARENT  , MT(MOD_LGUI, KC_H)        , MT(MOD_LALT, KC_I)    , MT(MOD_LCTL, KC_E), MT(MOD_LSFT, KC_A), KC_O, KC_QUES, KC_EXLM, KC_D, MT(MOD_RSFT, KC_T), MT(MOD_LCTL, KC_R), MT(MOD_LALT, KC_N), MT(MOD_LGUI, KC_S), KC_HASH,
     KC_SLASH        , KC_K                      , MT(MOD_RALT, KC_Y)    , RALT(KC_P), RALT(KC_Q), KC_Q, KC_J, KC_G, KC_W, MT(MOD_RALT, KC_V), KC_Z, KC_TRANSPARENT,
-    KC_TRANSPARENT  , KC_TRANSPARENT            , KC_TRANSPARENT        , KC_TRANSPARENT, LT(3, KC_ESCAPE), CAPS_WORD, KC_QUOTE, LT(6, KC_DELETE), KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT  , KC_TRANSPARENT            , KC_TRANSPARENT        , KC_TRANSPARENT, LT(3, KC_ESCAPE), CAPS_WORD, KC_QUOTE, LT(6, KC_DELETE), KC_TRANSPARENT, SELWORD, KC_TRANSPARENT, KC_TRANSPARENT,
     LT(1, KC_BSPC)  , LT(2, KC_TAB)             , KC_MEH, KC_TRANSPARENT, LT(5, KC_ENTER), LT(4, KC_SPACE)
   ),
   [1] = LAYOUT_moonlander(
@@ -91,6 +93,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t * record) {
+//  https://getreuer.info/posts/keyboards/select-word/index.html
+  if (!process_select_word(keycode, record, SELWORD)) { return false; }
+
+// original content of this function
   if (record -> event.pressed) {
     switch (keycode) {
     case VRSN:
