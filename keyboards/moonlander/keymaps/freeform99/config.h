@@ -19,3 +19,4 @@
 #pragma once
 
 #define ORYX_CONFIGURATOR
+#define IGNORE_MOD_TAP_INTERRUPT
