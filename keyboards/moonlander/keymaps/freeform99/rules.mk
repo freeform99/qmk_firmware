@@ -11,3 +11,6 @@ SRC += features/select_word.c
 
 #https://getreuer.info/posts/keyboards/sentence-case/index.html#add-it-to-your-keymap
 SRC += features/sentence_case.c
+
+
+VPATH  +=  keyboards/gboards/

@@ -310,7 +310,7 @@ __attribute__((weak)) char sentence_case_press_user(uint16_t keycode,
         return 'a';  // Letter key.
 
       case KC_DOT:  // . is punctuation, Shift . is a symbol (>)
-        return !shifted ? '.' : '#';
+        return !shifted ? '.' : '.';
       case KC_1:
       case KC_SLSH:
         return shifted ? '.' : '#';
@@ -318,7 +318,7 @@ __attribute__((weak)) char sentence_case_press_user(uint16_t keycode,
       case KC_MINS ... KC_SCLN:  // - = [ ] ; backslash
       case KC_GRV:
       case KC_COMM:
-        return '#';  // Symbol key.
+        return !shifted ? '#' : '.';
 
       case KC_SPC:
         return ' ';  // Space key.
